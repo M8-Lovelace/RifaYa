@@ -2,7 +2,7 @@
 
 RifaYa es un proyecto de Vue 3 + Vite para crear y administrar rifas. Este paquete utiliza Vue.js y Quasar Framework para crear una interfaz de usuario interactiva y atractiva.
 
-- [Enlace para ver el proyecto](https://peaceful-melomakarona-840d26.netlify.app/)
+- [Enlace para ver el proyecto](https://fantastic-starlight-72c889.netlify.app/)
 
 ## Instalación
 Una pequeña introducción sobre la instalación.
