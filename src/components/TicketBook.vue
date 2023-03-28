@@ -37,11 +37,7 @@
               </div>
             </span>
             <div class="row justify-end">
-              <q-btn
-                class="q-my-sm q-pb-sm edit"
-                @click="editTicket()"
-                :disabled="validatestateTwo()"
-              >
+              <q-btn class="q-my-sm q-pb-sm edit" @click="editTicket()" :disabled="validatestateTwo()">
                 <img src="../assets/edit.png" alt="" width="15" />
                 <span class="q-pl-sm q-pt-xs">Editar</span>
               </q-btn>
@@ -56,65 +52,33 @@
                       Modificar la información
                     </h5>
                     <br />
-                    <span class="text-teal text-bold"
-                      >Talonario número {{ currentItem[0].id }}</span
-                    ><br /><br />
+                    <span class="text-teal text-bold">Talonario número {{ currentItem[0].id }}</span><br /><br />
 
-                    <label class="q-mb-md color"
-                      >Modifica el nombre del premio</label
-                    >
-                    <q-input
-                      v-model="thing"
-                      :rules="[
-                        (val) =>
-                          (val && val.length > 0) ||
-                          'Por favor ingrese un premio',
-                      ]"
-                    />
+                    <label class="q-mb-md color">Modifica el nombre del premio</label>
+                    <q-input v-model="thing" :rules="[
+                      (val) =>
+                        (val && val.length > 0) ||
+                        'Por favor ingrese un premio',
+                    ]" />
 
-                    <label class="q-mb-md color"
-                      >Modifica la loteria con que se establece el
-                      ganador</label
-                    >
-                    <q-select
-                      v-model="lottery"
-                      :options="lotteries"
-                      label="Escoge una opción"
-                      lazy-rules
-                      :rules="[
-                        (val) =>
-                          (val && val.length > 0) ||
-                          'Por favor seleccione una loteria',
-                      ]"
-                    />
+                    <label class="q-mb-md color">Modifica la loteria con que se establece el
+                      ganador</label>
+                    <q-select v-model="lottery" :options="lotteries" label="Escoge una opción" lazy-rules :rules="[
+                      (val) =>
+                        (val && val.length > 0) ||
+                        'Por favor seleccione una loteria',
+                    ]" />
 
-                    <label class="q-my-lg"
-                      >Modifica la fecha de juego de tu concurso</label
-                    >
-                    <q-input
-                      type="date"
-                      v-model="dates"
-                      lazy-rules
-                      :rules="[
-                        (val) =>
-                          (val && val.length > 0) ||
-                          'Por favor ingrese un fecha',
-                        dateBiggerThanToday,
-                      ]"
-                    />
+                    <label class="q-my-lg">Modifica la fecha de juego de tu concurso</label>
+                    <q-input type="date" v-model="dates" lazy-rules :rules="[
+                      (val) =>
+                        (val && val.length > 0) ||
+                        'Por favor ingrese un fecha',
+                      dateBiggerThanToday,
+                    ]" />
                     <div class="row justify-center">
-                      <q-btn
-                        class="q-px-md text-bold q-mx-sm"
-                        color="teal"
-                        @click="closeEdit()"
-                        label="Cerrar"
-                      />
-                      <q-btn
-                        class="q-px-md text-bold q-mx-sm"
-                        color="teal"
-                        @click="saveEdit()"
-                        label="Guardar"
-                      />
+                      <q-btn class="q-px-md text-bold q-mx-sm" color="teal" @click="closeEdit()" label="Cerrar" />
+                      <q-btn class="q-px-md text-bold q-mx-sm" color="teal" @click="saveEdit()" label="Guardar" />
                     </div>
                   </div>
                 </q-card-section>
@@ -122,13 +86,10 @@
             </q-dialog>
           </div>
           <div class="col-4 options">
-            <div
-              class="btn row justify-center"
-              :class="{
-                stateOneTicket: currentItem[0].state == 0,
-                stateTwoTicket: currentItem[0].state == 1,
-              }"
-            >
+            <div class="btn row justify-center" :class="{
+              stateOneTicket: currentItem[0].state == 0,
+              stateTwoTicket: currentItem[0].state == 1,
+            }">
               <span class="q-px-lg text-bold">{{
                 generateState(currentItem[0].state)
               }}</span>
@@ -136,17 +97,10 @@
             <button class="btn row justify-center hover" @click="listTicket()">
               <span>Listar boletas</span>
             </button>
-            <button
-              class="btn row justify-center hover"
-              @click="listInfoTicket()"
-            >
+            <button class="btn row justify-center hover" @click="listInfoTicket()">
               <span>Información del talonario</span>
             </button>
-            <button
-              @click="cancelTicket()"
-              :disabled="validatestateTwo()"
-              class="btn hover"
-            >
+            <button @click="cancelTicket()" :disabled="validatestateTwo()" class="btn hover">
               Cancelar Sorteo
             </button>
           </div>
@@ -159,97 +113,57 @@
                     Listar boletas
                   </h5>
                   <br />
-                  <span class="text-teal text-bold"
-                    >Talonario número {{ currentItem[0].id }}</span
-                  ><br /><br />
+                  <span class="text-teal text-bold">Talonario número {{ currentItem[0].id }}</span><br /><br />
                   <div class="list">
-                    <div
-                      v-for="(item, index) in currentItem[0].numbers.filter(
-                        (num) => num.state === 1 || num.state === 2
-                      )"
-                    >
+                    <div v-for="(item, index) in currentItem[0].numbers.filter(
+                      (num) => num.state === 1 || num.state === 2
+                    )">
                       <div class="row bg q-my-xs">
-                        <div class="col-4 q-pl-xs row">
+                        <div class="col-5 q-pl-xs row">
                           <div class="q-pt-sm q-mt-xs">
-                            <span
-                              class="q-pa-xs list-ticket"
-                              :class="{
-                                stateTwo: item.state == 1,
-                                stateThree: item.state == 2,
-                              }"
-                              >{{ item.number }}</span
-                            >
+                            <span class="q-pa-xs list-ticket" :class="{
+                              stateTwo: item.state == 1,
+                              stateThree: item.state == 2,
+                            }">{{ item.number }}</span>
                           </div>
                           <div class="q-py-xs q-pl-sm item-list">
-                            <span class="n">{{ item.owner }}</span
-                            ><br />
+                            <span class="n">{{ item.owner }}</span><br />
                             <span class="n">{{ item.celphone }}</span>
                           </div>
                         </div>
-                        <div class="col-8 q-pt-xs row justify-end">
+                        <div class="col-7 q-pt-xs row justify-end">
                           <span class="q-pt-sm">{{
                             getStateInTextTwo(item.state)
                           }}</span>
-                          <q-btn
-                            class="q-ml-lg bt q-mr-xs"
-                            color="teal"
-                            @click="seeInformationDetail(item)"
-                            >Detalles</q-btn
-                          >
+                          <q-btn class="q-ml-lg bt q-mr-xs detail" color="teal"
+                            @click="seeInformationDetail(item)">Detalles</q-btn>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="row justify-center q-mt-sm">
-                    <q-btn
-                      class="q-px-md text-bold"
-                      color="teal"
-                      @click="closeList()"
-                      label="Cerrar"
-                    />
+                    <q-btn class="q-px-md text-bold" color="teal" @click="closeList()" label="Cerrar" />
                   </div>
                 </div>
               </q-card-section>
             </q-card>
           </q-dialog>
           <q-dialog v-model="viewInfoTicket">
-            <q-card class="q-pa-md" style="width: 350px">
+            <q-card style="width: 350px">
               <q-linear-progress :value="1" color="teal" />
               <h5 class="text-teal text-center text-bold q-pt-md">
                 Información del talonario
               </h5>
               <q-card-section class="row no-wrap">
                 <div class="col column">
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold"
-                      >Talonario número:</span
-                    ></span
-                  >
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold">Premio:</span></span
-                  >
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold"
-                      >Tipo artículo:</span
-                    ></span
-                  >
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold">Precio:</span></span
-                  >
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold">Fecha:</span></span
-                  >
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold">Loteria:</span></span
-                  >
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold">Estado:</span></span
-                  >
-                  <span class="q-mt-sm"
-                    ><span class="text-teal text-bold"
-                      >Boletas disponibles:</span
-                    ></span
-                  >
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Talonario número:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Premio:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Tipo artículo:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Precio:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Fecha:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Loteria:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span></span>
+                  <span class="q-mt-sm"><span class="text-teal text-bold">Boletas disponibles:</span></span>
                 </div>
                 <div class="col column ellipsis">
                   {{}}
@@ -269,146 +183,79 @@
                 </div>
               </q-card-section>
               <div class="column items-center">
-                <q-btn
-                  class="text-bold q-mb-md"
-                  color="teal"
-                  @click="backTicketList()"
-                  label="Volver"
-                />
+                <q-btn class="text-bold q-mb-md" color="teal" @click="backTicketList()" label="Volver" />
               </div>
             </q-card>
           </q-dialog>
         </div>
         <div class="row q-mt-sm second-row">
           <div class="col-12 numbers full-width">
-            <div
-              class="column items-center"
-              v-for="(item, index) in currentItem[0].numbers"
-            >
-              <button
-                class="number"
-                :class="{
-                  stateOne: item.state == 0,
-                  stateTwo: item.state == 1,
-                  stateThree: item.state == 2,
-                }"
-                @click="open(index, item)"
-              >
+            <div class="column items-center" v-for="(item, index) in currentItem[0].numbers">
+              <button class="number" :class="{
+                stateOne: item.state == 0,
+                stateTwo: item.state == 1,
+                stateThree: item.state == 2,
+              }" @click="open(index, item)">
                 {{ index }}
               </button>
             </div>
             <q-dialog v-model="dialog">
               <q-card style="width: 350px">
                 <q-linear-progress :value="1" color="teal" />
-                <q-card-section
-                  v-if="itemValue.state == 0"
-                  class="row items-center no-wrap"
-                >
+                <q-card-section v-if="itemValue.state == 0" class="row items-center no-wrap">
                   <div class="col column items-center">
                     <h4 class="text-teal text-bold">
                       Boleta {{ itemValue.number }}
                     </h4>
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold space">Estado:</span>
-                      {{ getStateInText(itemValue.state) }}</span
-                    >
+                    <span class="q-mt-sm"><span class="text-teal text-bold space">Estado:</span>
+                      {{ getStateInText(itemValue.state) }}</span>
                     <hr class="q-my-md full-width" />
-                    <q-btn
-                      class="q-px-md text-bold full-width"
-                      v-show="validatestate()"
-                      color="teal"
-                      @click="showBuyTicket(itemValue)"
-                    >
-                      <img
-                        class="q-mr-xs"
-                        src="../assets/dollar.png"
-                        width="15"
-                      />
+                    <q-btn class="q-px-md text-bold full-width" v-show="validatestate()" color="teal"
+                      @click="showBuyTicket(itemValue)">
+                      <img class="q-mr-xs" src="../assets/dollar.png" width="15" />
                       <span>Adquirir Boleta</span>
                     </q-btn>
-                    <q-btn
-                      class="q-px-md full-width space"
-                      color="teal"
-                      @click="closeDialog()"
-                    >
+                    <q-btn class="q-px-md full-width space" color="teal" @click="closeDialog()">
                       <span class="text-bold">Cerrar</span>
                     </q-btn>
                   </div>
                 </q-card-section>
-                <q-card-section
-                  v-if="itemValue.state == 1"
-                  class="row items-center no-wrap"
-                >
+                <q-card-section v-if="itemValue.state == 1" class="row items-center no-wrap">
                   <div class="col column items-center">
                     <h4 class="text-teal text-bold">
                       Boleta {{ itemValue.number }}
                     </h4>
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold">Estado:</span>
-                      {{ getStateInText(itemValue.state) }}</span
-                    >
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span>
+                      {{ getStateInText(itemValue.state) }}</span>
                     <hr class="q-my-md full-width" />
-                    <q-btn
-                      class="q-px-md text-bold full-width space"
-                      color="teal"
-                      @click="seeInformation()"
-                    >
-                      <i class="icon icon-eye"></i
-                      ><span class="q-pl-sm">Ver datos del participante</span>
+                    <q-btn class="q-px-md text-bold full-width space" color="teal" @click="seeInformation()">
+                      <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span>
                     </q-btn>
-                    <q-btn
-                      class="q-px-md text-bold full-width space"
-                      color="teal"
-                      v-show="validatestate()"
-                      @click="releaseTicket()"
-                    >
-                      <i class="icon icon-loop"></i
-                      ><span class="q-pl-sm">Liberar boleta</span>
+                    <q-btn class="q-px-md text-bold full-width space" color="teal" v-show="validatestate()"
+                      @click="releaseTicket()">
+                      <i class="icon icon-loop"></i><span class="q-pl-sm">Liberar boleta</span>
                     </q-btn>
-                    <q-btn
-                      class="q-px-md text-bold full-width space"
-                      color="teal"
-                      v-show="validatestate()"
-                      @click="checkPaid()"
-                    >
-                      <i class="icon icon-checked"></i
-                      ><span class="q-pl-sm">Marcar como pagada</span>
+                    <q-btn class="q-px-md text-bold full-width space" color="teal" v-show="validatestate()"
+                      @click="checkPaid()">
+                      <i class="icon icon-checked"></i><span class="q-pl-sm">Marcar como pagada</span>
                     </q-btn>
-                    <q-btn
-                      @click="closeDialog()"
-                      class="q-px-md full-width space"
-                      color="teal"
-                    >
+                    <q-btn @click="closeDialog()" class="q-px-md full-width space" color="teal">
                       <span class="text-bold">Cerrar</span>
                     </q-btn>
                   </div>
                 </q-card-section>
-                <q-card-section
-                  v-if="itemValue.state == 2"
-                  class="row items-center no-wrap"
-                >
+                <q-card-section v-if="itemValue.state == 2" class="row items-center no-wrap">
                   <div class="col column items-center">
                     <h4 class="text-teal text-bold">
                       Boleta {{ itemValue.number }}
                     </h4>
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold">Estado:</span>
-                      {{ getStateInText(itemValue.state) }}</span
-                    >
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span>
+                      {{ getStateInText(itemValue.state) }}</span>
                     <hr class="q-my-md full-width" />
-                    <q-btn
-                      class="q-px-md text-bold full-width"
-                      color="teal"
-                      @click="seeInformation()"
-                    >
-                      <i class="icon icon-eye"></i
-                      ><span class="q-pl-sm">Ver datos del participante</span>
+                    <q-btn class="q-px-md text-bold full-width" color="teal" @click="seeInformation()">
+                      <i class="icon icon-eye"></i><span class="q-pl-sm">Ver datos del participante</span>
                     </q-btn>
-                    <q-btn
-                      @click="closeDialog()"
-                      class="q-px-md full-width space"
-                      color="teal"
-                    >
+                    <q-btn @click="closeDialog()" class="q-px-md full-width space" color="teal">
                       <span class="text-bold">Cerrar</span>
                     </q-btn>
                   </div>
@@ -418,50 +265,26 @@
             <q-dialog v-model="buyTicket">
               <q-card style="width: 350px">
                 <q-linear-progress :value="1" color="teal" />
-                <q-card-section
-                  v-if="itemValue.state == 0"
-                  class="row items-center no-wrap"
-                >
+                <q-card-section v-if="itemValue.state == 0" class="row items-center no-wrap">
                   <div class="col column items-center">
                     <h5 class="text-teal text-bold">
                       Diligenciar la información
                     </h5>
-                    <q-input
-                      type="text"
-                      class="q-my-md full-width"
-                      v-model="dataTicket.name"
-                      label="Nombre"
-                      lazy-rules
+                    <q-input type="text" class="q-my-md full-width" v-model="dataTicket.name" label="Nombre" lazy-rules
                       :rules="[
                         (val) =>
                           (val && val.length > 0) ||
                           'Por favor ingrese un nombre',
-                      ]"
-                    />
-                    <q-input
-                      type="text"
-                      class="q-my-md full-width"
-                      v-model="dataTicket.comments"
-                      label="Observaciones (Opcional)"
-                    />
-                    <q-input
-                      type="number"
-                      class="q-my-md full-width q-mb-lg"
-                      v-model="dataTicket.celphone"
-                      label="Celular"
-                      lazy-rules
-                      :rules="[
+                      ]" />
+                    <q-input type="text" class="q-my-md full-width" v-model="dataTicket.comments"
+                      label="Observaciones (Opcional)" />
+                    <q-input type="number" class="q-my-md full-width q-mb-lg" v-model="dataTicket.celphone"
+                      label="Celular" lazy-rules :rules="[
                         (val) =>
                           (val && val.length > 0) ||
                           'Por favor ingrese un telefono',
-                      ]"
-                    />
-                    <q-btn
-                      class="q-px-lg text-bold"
-                      color="teal"
-                      @click="onSubmit()"
-                      label="Adquirir Boleta"
-                    />
+                      ]" />
+                    <q-btn class="q-px-lg text-bold" color="teal" @click="onSubmit()" label="Adquirir Boleta" />
                   </div>
                 </q-card-section>
               </q-card>
@@ -474,35 +297,13 @@
                 </h5>
                 <q-card-section class="row no-wrap">
                   <div class="col column">
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold"
-                        >Boleta número:</span
-                      ></span
-                    >
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold">Nombre:</span></span
-                    >
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold"
-                        >Observaciones:</span
-                      ></span
-                    >
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold">Teléfono:</span></span
-                    >
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold"
-                        >Adquirido el:</span
-                      ></span
-                    >
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold">Estado:</span></span
-                    >
-                    <span class="q-mt-sm"
-                      ><span class="text-teal text-bold"
-                        >Metodo de pago:</span
-                      ></span
-                    >
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Boleta número:</span></span>
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Nombre:</span></span>
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Observaciones:</span></span>
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Teléfono:</span></span>
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Adquirido el:</span></span>
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Estado:</span></span>
+                    <span class="q-mt-sm"><span class="text-teal text-bold">Metodo de pago:</span></span>
                   </div>
                   <div class="col column ellipsis">
                     <span class="q-mt-sm">{{ itemValue.number }}</span>
@@ -522,20 +323,9 @@
                   </div>
                 </q-card-section>
                 <div class="column items-center">
-                  <q-btn
-                    class="text-bold q-mb-md"
-                    color="teal"
-                    v-show="backButton"
-                    @click="back()"
-                    label="Volver"
-                  />
-                  <q-btn
-                    class="text-bold q-mb-md"
-                    color="teal"
-                    v-show="backButtonTwo"
-                    @click="backTicket()"
-                    label="Volver"
-                  />
+                  <q-btn class="text-bold q-mb-md" color="teal" v-show="backButton" @click="back()" label="Volver" />
+                  <q-btn class="text-bold q-mb-md" color="teal" v-show="backButtonTwo" @click="backTicket()"
+                    label="Volver" />
                 </div>
               </q-card>
             </q-dialog>
@@ -547,21 +337,10 @@
                 </h5>
                 <q-card-section class="row no-wrap">
                   <div class="col column">
-                    <label class="q-mb-md"
-                      >Indica cómo la fue pagada esta boleta</label
-                    >
-                    <q-select
-                      v-model="method"
-                      :options="methods"
-                      label="Escoge una opción"
-                    /><br />
-                    <q-input
-                      class="anotherWay q-mb-md"
-                      v-if="method != null && method.value == 6"
-                      type="text"
-                      v-model="anotherWay"
-                      placeholder="Ejemplo: Bonos, Paypal, envíos, cheque..."
-                    ></q-input>
+                    <label class="q-mb-md">Indica cómo la fue pagada esta boleta</label>
+                    <q-select v-model="method" :options="methods" label="Escoge una opción" /><br />
+                    <q-input class="anotherWay q-mb-md" v-if="method != null && method.value == 6" type="text"
+                      v-model="anotherWay" placeholder="Ejemplo: Bonos, Paypal, envíos, cheque..."></q-input>
                     <span class="text-center text" v-if="method != null">
                       * Una vez marcada como pagada no es posible modificar este
                       estado *
@@ -569,19 +348,9 @@
                   </div>
                 </q-card-section>
                 <div>
-                  <q-btn
-                    class="text-bold q-mb-md q-mx-md"
-                    color="teal"
-                    @click="backMethod()"
-                    label="Volver"
-                  />
-                  <q-btn
-                    class="text-bold q-mb-md q-mx-md"
-                    v-if="method != null"
-                    color="teal"
-                    @click="confirmPayment()"
-                    label="Marcar"
-                  />
+                  <q-btn class="text-bold q-mb-md q-mx-md" color="teal" @click="backMethod()" label="Volver" />
+                  <q-btn class="text-bold q-mb-md q-mx-md" v-if="method != null" color="teal" @click="confirmPayment()"
+                    label="Marcar" />
                 </div>
               </q-card>
             </q-dialog>
@@ -628,12 +397,7 @@
                 </div>
               </div>
             </div>
-            <q-btn
-              class="q-px-md text-bold q-mx-sm q-mb-md"
-              color="teal"
-              @click="closeRules()"
-              label="Cerrar"
-            />
+            <q-btn class="q-px-md text-bold q-mx-sm q-mb-md" color="teal" @click="closeRules()" label="Cerrar" />
           </q-card>
         </q-dialog>
       </template>
@@ -894,16 +658,30 @@ function getMethodInText(method) {
 }
 
 function releaseTicket() {
-  itemValue.value.state = 0;
-  itemValue.value.owner = "";
-  itemValue.value.celphone = "";
-  itemValue.value.comments = "NO REGISTRADO";
-  itemValue.value.date = "";
-  itemValue.value.methodPayment = 0;
-  currentItem.value[0].numbers[itemValue.value.number] = itemValue.value;
-  currentItem.value[0].numbers[itemValue.value.number];
-  storage.modifyData(currentItem.value[0]);
-  dialog.value = false;
+  const ok = true;
+  if (ok) {
+    $q.dialog({
+      title: "Confirmar",
+      message: "¿Está seguro que desea liberar la boleta?",
+      cancel: true,
+      persistent: true,
+    })
+      .onOk(() => {
+        itemValue.value.state = 0;
+        itemValue.value.owner = "";
+        itemValue.value.celphone = "";
+        itemValue.value.comments = "NO REGISTRADO";
+        itemValue.value.date = "";
+        itemValue.value.methodPayment = 0;
+        currentItem.value[0].numbers[itemValue.value.number] = itemValue.value;
+        currentItem.value[0].numbers[itemValue.value.number];
+        storage.modifyData(currentItem.value[0]);
+        dialog.value = false;
+      })
+      .onCancel(() => {
+        (">>>> CANCEL");
+      })
+  }
 }
 
 function isInputsValidate() {
@@ -1061,7 +839,7 @@ function revertGenerateDate(date) {
 
 function showShare(grid) {
   $q.bottomSheet({
-    message: "Bottom Sheet message",
+    message: "Options",
     grid,
     actions: [
       {
@@ -1089,8 +867,8 @@ function showShare(grid) {
         });
       }
     })
-    .onCancel(() => {})
-    .onDismiss(() => {});
+    .onCancel(() => { })
+    .onDismiss(() => { });
 }
 
 function showRules() {
@@ -1129,6 +907,11 @@ function shareTicket() {
 
 .list::-webkit-scrollbar {
   display: none;
+}
+
+.detail{
+  font-size: 12px;
+  margin-top: 5px;
 }
 
 .rule {
@@ -1185,7 +968,7 @@ function shareTicket() {
 }
 
 .item-list {
-  max-width: 60px;
+  max-width: 80px;
   overflow: hidden;
 }
 
@@ -1407,6 +1190,10 @@ function shareTicket() {
     height: 40px;
   }
 
+  .item-list {
+  max-width: 100px;
+  }
+
   .infoTickets .text {
     font-size: 13px;
   }
@@ -1441,6 +1228,10 @@ function shareTicket() {
   .number {
     width: 50px;
     height: 50px;
+  }
+
+  .item-list {
+    max-width: 100px;
   }
 
   .edit span {
