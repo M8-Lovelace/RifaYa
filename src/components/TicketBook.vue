@@ -400,6 +400,19 @@
             <q-btn class="q-px-md text-bold q-mx-sm q-mb-md" color="teal" @click="closeRules()" label="Cerrar" />
           </q-card>
         </q-dialog>
+
+        <q-dialog v-model="chart">
+          <q-card class="column items-center" style="width: 400px">
+            <q-linear-progress :value="1" color="teal" />
+            <div class="text-center q-px-xl q-pt-md">
+              <h6 class="title">BOLETAS VENDIDAS</h6>
+              <div style="font-size: 12px">
+                <Doughnut class="q-mb-md" id="doughnut-chart" :options="chartOptions" :data="chartData"></Doughnut>
+              </div>
+            </div>
+            <q-btn class="q-px-md text-bold q-mx-sm q-mb-md" color="teal" @click="closeChart()" label="Cerrar" />
+          </q-card>
+        </q-dialog>
       </template>
       <template v-else>
         <h3 class="q-ma-xl">No hay información</h3>
@@ -413,6 +426,33 @@ import { useQuasar } from "quasar";
 import { onMounted, computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStorage } from "@/stores/localStorage";
+import { Doughnut } from "vue-chartjs";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+} from "chart.js";
+const colors = [
+  "rgb(69,177,223)",
+  "rgb(99,201,122)",
+  "rgb(203,82,82)",
+  "rgb(229,224,88)",
+];
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement
+);
 
 const route = useRoute();
 const storage = useStorage();
@@ -437,6 +477,7 @@ const backButton = ref(true);
 const backButtonTwo = ref(false);
 const viewInfoTicket = ref(false);
 const rulesDialog = ref(false);
+const chart = ref(false);
 
 let currentItem = ref(null);
 let currentId = computed(() => storage.getActiveId);
@@ -523,6 +564,22 @@ onMounted(() => {
 
 watch(currentId, () => {
   getCurrentItem();
+});
+
+let chartData = computed(() => {
+  return {
+    labels: ["Vendidas", "Disponibles"],
+    datasets: [
+      {
+        data: [(currentItem.value[0].numbers.filter((num) => num.state === 2).length + currentItem.value[0].numbers.filter((num) => num.state === 1).length), currentItem.value[0].numbers.filter((num) => num.state === 0).length],
+        backgroundColor: colors,
+      },
+    ]
+  }
+});
+
+let chartOptions = ref({
+  responsive: true,
 });
 
 function open(index, item) {
@@ -680,7 +737,7 @@ function releaseTicket() {
       })
       .onCancel(() => {
         (">>>> CANCEL");
-      })
+      });
   }
 }
 
@@ -825,6 +882,10 @@ function dateBiggerThanToday(val) {
   );
 }
 
+function closeChart() {
+  chart.value = false;
+}
+
 function editTicket() {
   editTicketModal.value = true;
   lottery.value = currentItem.value[0].lottery;
@@ -839,20 +900,20 @@ function revertGenerateDate(date) {
 
 function showShare(grid) {
   $q.bottomSheet({
-    message: "Options",
+    message: "Opciones",
     grid,
     actions: [
       {
-        label: "Share",
-        icon: "share",
-        id: "share",
-      },
-      {
-        label: "Upload",
-        icon: "cloud_upload",
+        label: "Grafica",
+        icon: "photo_camera",
         color: "primary",
         id: "upload",
       },
+      {
+        label: "Compartir",
+        icon: "share",
+        id: "share",
+      }
     ],
   })
     .onOk((action) => {
@@ -860,11 +921,7 @@ function showShare(grid) {
       if (action.id == "share") {
         shareTicket();
       } else {
-        $q.dialog({
-          title: "Función especial",
-          message: "Lo sentimos, esta función es del plan premium",
-          html: true,
-        });
+        showChart();
       }
     })
     .onCancel(() => { })
@@ -877,6 +934,10 @@ function showRules() {
 
 function closeRules() {
   rulesDialog.value = false;
+}
+
+function showChart() {
+  chart.value = true;
 }
 
 function shareTicket() {
@@ -909,7 +970,7 @@ function shareTicket() {
   display: none;
 }
 
-.detail{
+.detail {
   font-size: 12px;
   margin-top: 5px;
 }
@@ -1191,7 +1252,7 @@ function shareTicket() {
   }
 
   .item-list {
-  max-width: 100px;
+    max-width: 100px;
   }
 
   .infoTickets .text {
